@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 interface GeolocationState {
   latitude: number | null;
@@ -15,12 +15,14 @@ export function useGeolocation() {
     error: null,
   });
 
-  useEffect(() => {
+  const getLocation = useCallback(() => {
+    setState((prev) => ({ ...prev, loading: true, error: null }));
+
     if (!navigator.geolocation) {
       setState((prev) => ({
         ...prev,
         loading: false,
-        error: 'Geolocalização não suportada pelo navegador.',
+        error: "Geolocalização não suportada pelo navegador.",
       }));
       return;
     }
@@ -36,21 +38,23 @@ export function useGeolocation() {
 
     const errorHandler = (error: GeolocationPositionError) => {
       let errorMessage: string;
-      
+
       switch (error.code) {
         case error.PERMISSION_DENIED:
-          errorMessage = 'Permissão de localização negada. Busque uma cidade manualmente.';
+          errorMessage =
+            "Permissão de localização negada. Busque uma cidade manualmente.";
           break;
         case error.POSITION_UNAVAILABLE:
-          errorMessage = 'Localização indisponível. Tente novamente.';
+          errorMessage = "Localização indisponível. Tente novamente.";
           break;
         case error.TIMEOUT:
-          errorMessage = 'Tempo esgotado ao obter localização. Tente novamente.';
+          errorMessage =
+            "Tempo esgotado ao obter localização. Tente novamente.";
           break;
         default:
-          errorMessage = 'Erro desconhecido ao obter localização.';
+          errorMessage = "Erro desconhecido ao obter localização.";
       }
-      
+
       setState({
         latitude: null,
         longitude: null,
@@ -66,5 +70,9 @@ export function useGeolocation() {
     });
   }, []);
 
-  return state;
+  useEffect(() => {
+    getLocation();
+  }, [getLocation]);
+
+  return { ...state, getLocation };
 }

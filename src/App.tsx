@@ -30,7 +30,7 @@ function WeatherApp() {
   const [useGeoLocation, setUseGeoLocation] = useState(true);
 
   // Get user's geolocation
-  const { latitude, longitude, loading: geoLoading, error: geoError } = useGeolocation();
+  const { latitude, longitude, loading: geoLoading, error: geoError, getLocation } = useGeolocation();
 
   // Determine coordinates to use
   const coords = selectedCity 
@@ -118,6 +118,7 @@ function WeatherApp() {
             <ErrorMessage 
               type="geolocation"
               message={geoError}
+              onRetry={getLocation}
             />
           )}
 
