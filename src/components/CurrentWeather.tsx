@@ -1,20 +1,31 @@
-import { MapPin } from 'lucide-react';
+import { MapPin, Star } from 'lucide-react';
 import type { WeatherData } from '../types/weather';
 import { formatTemperature, capitalizeWords, getWeatherIconUrl } from '../utils';
 
 interface CurrentWeatherProps {
   weather: WeatherData;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }
 
-export function CurrentWeather({ weather }: CurrentWeatherProps) {
+export function CurrentWeather({ weather, isFavorite, onToggleFavorite }: CurrentWeatherProps) {
   return (
-    <div className="text-center animate-fade-in">
+    <div className="text-center animate-fade-in relative">
       {/* Location */}
       <div className="flex items-center justify-center gap-2 mb-2">
         <MapPin className="w-5 h-5 text-slate-600 dark:text-white" />
         <h1 className="text-2xl md:text-3xl font-semibold text-slate-800 dark:text-white text-shadow">
           {weather.city}, {weather.country}
         </h1>
+        <button
+          onClick={onToggleFavorite}
+          className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors ml-1"
+          title={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+        >
+          <Star 
+            className={`w-5 h-5 ${isFavorite ? 'text-amber-400 fill-amber-400' : 'text-slate-400 dark:text-slate-500'}`} 
+          />
+        </button>
       </div>
 
       {/* Weather Icon and Temperature */}

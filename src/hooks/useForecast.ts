@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getForecast } from '../services/weatherApi';
-import type { ForecastDay } from '../types/weather';
+import type { ForecastDay, HourlyForecast } from '../types/weather';
 
 interface UseForecastOptions {
   latitude: number | null;
@@ -8,8 +8,13 @@ interface UseForecastOptions {
   enabled?: boolean;
 }
 
+interface ForecastData {
+  daily: ForecastDay[];
+  hourly: HourlyForecast[];
+}
+
 export function useForecast({ latitude, longitude, enabled = true }: UseForecastOptions) {
-  return useQuery<ForecastDay[], Error>({
+  return useQuery<ForecastData, Error>({
     queryKey: ['forecast', latitude, longitude],
     queryFn: () => getForecast(latitude!, longitude!),
     enabled: enabled && latitude !== null && longitude !== null,
@@ -18,3 +23,4 @@ export function useForecast({ latitude, longitude, enabled = true }: UseForecast
     retry: 2,
   });
 }
+

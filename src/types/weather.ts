@@ -1,14 +1,14 @@
 // Weather condition types
-export type WeatherCondition = 
-  | 'clear' 
-  | 'clouds' 
-  | 'rain' 
-  | 'drizzle'
-  | 'snow' 
-  | 'thunderstorm' 
-  | 'mist'
-  | 'fog'
-  | 'haze';
+export type WeatherCondition =
+  | "clear"
+  | "clouds"
+  | "rain"
+  | "drizzle"
+  | "snow"
+  | "thunderstorm"
+  | "mist"
+  | "fog"
+  | "haze";
 
 // Current weather data
 export interface WeatherData {
@@ -39,6 +39,16 @@ export interface ForecastDay {
   dayName: string;
   tempMin: number;
   tempMax: number;
+  icon: string;
+  description: string;
+  condition: WeatherCondition;
+}
+
+// 3-hour interval forecast data
+export interface HourlyForecast {
+  dt: number;
+  time: string;
+  temp: number;
   icon: string;
   description: string;
   condition: WeatherCondition;
@@ -129,17 +139,17 @@ export interface OpenWeatherGeoResponse {
 }
 
 // Theme type based on weather
-export type WeatherTheme = 
-  | 'gradient-clear-day'
-  | 'gradient-clear-night'
-  | 'gradient-cloudy'
-  | 'gradient-rainy'
-  | 'gradient-snow'
-  | 'gradient-storm'
-  | 'gradient-mist';
+export type WeatherTheme =
+  | "gradient-clear-day"
+  | "gradient-clear-night"
+  | "gradient-cloudy"
+  | "gradient-rainy"
+  | "gradient-snow"
+  | "gradient-storm"
+  | "gradient-mist";
 
 // Error types
 export interface WeatherError {
-  type: 'geolocation' | 'api' | 'not-found' | 'network';
+  type: "geolocation" | "api" | "not-found" | "network";
   message: string;
 }

@@ -6,6 +6,7 @@ import type {
   OpenWeatherForecastResponse,
   OpenWeatherGeoResponse,
   WeatherCondition,
+  HourlyForecast,
 } from '../types/weather';
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -124,6 +125,27 @@ function transformForecast(data: OpenWeatherForecastResponse): ForecastDay[] {
   return forecasts;
 }
 
+// Transform 3-hour interval forecast API response for hourly view (next 24h)
+function transformHourlyForecast(data: OpenWeatherForecastResponse): HourlyForecast[] {
+  const current = new Date();
+  const next24h = new Date(current.getTime() + 24 * 60 * 60 * 1000);
+
+  return data.list
+    .filter(item => {
+      const date = new Date(item.dt * 1000);
+      return date > current && date <= next24h;
+    })
+    .map(item => ({
+      dt: item.dt,
+      time: new Date(item.dt * 1000).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      temp: Math.round(item.main.temp),
+      icon: item.weather[0].icon,
+      description: item.weather[0].description,
+      condition: mapCondition(item.weather[0].main),
+    }))
+    .slice(0, 8); // Ensure we only get max 8 items (24h / 3h = 8 items)
+}
+
 // User-friendly error messages
 const USER_FRIENDLY_ERRORS = {
   SERVICE_UNAVAILABLE: 'Não foi possível conectar ao serviço de clima. Tente novamente em alguns instantes.',
@@ -200,7 +222,7 @@ export async function getCurrentWeatherByCity(city: string): Promise<WeatherData
 }
 
 // Fetch 5-day forecast by coordinates
-export async function getForecast(lat: number, lon: number): Promise<ForecastDay[]> {
+export async function getForecast(lat: number, lon: number): Promise<{ daily: ForecastDay[]; hourly: HourlyForecast[] }> {
   try {
     const response = await fetch(
       `${BASE_URL}/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&lang=pt_br&appid=${API_KEY}`
@@ -216,7 +238,10 @@ export async function getForecast(lat: number, lon: number): Promise<ForecastDay
     }
     
     const data: OpenWeatherForecastResponse = await response.json();
-    return transformForecast(data);
+    return {
+      daily: transformForecast(data),
+      hourly: transformHourlyForecast(data),
+    };
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       console.error('[WeatherAPI] Network error:', error);
