@@ -2,11 +2,11 @@ import type { AQILevel, AQIQuality, AirQualityComponents } from '../types/weathe
 
 export function getAQIQuality(aqi: AQILevel): AQIQuality {
   const qualityMap: Record<AQILevel, AQIQuality> = {
-    1: 'Good',
-    2: 'Fair',
-    3: 'Moderate',
-    4: 'Poor',
-    5: 'Very Poor',
+    1: 'Boa',
+    2: 'Razoável',
+    3: 'Moderada',
+    4: 'Ruim',
+    5: 'Muito Ruim',
   };
   return qualityMap[aqi];
 }

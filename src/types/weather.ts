@@ -56,7 +56,7 @@ export interface HourlyForecast {
 
 // Air quality data
 export type AQILevel = 1 | 2 | 3 | 4 | 5;
-export type AQIQuality = 'Good' | 'Fair' | 'Moderate' | 'Poor' | 'Very Poor';
+export type AQIQuality = 'Boa' | 'Razoável' | 'Moderada' | 'Ruim' | 'Muito Ruim';
 
 export interface AirQualityComponents {
   co: number;      // Carbon monoxide, μg/m3

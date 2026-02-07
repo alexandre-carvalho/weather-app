@@ -139,10 +139,11 @@ function WeatherApp() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowFavorites(true)}
-              className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-slate-600 dark:text-white"
+              className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-slate-600 dark:text-white"
               title="Favoritos"
             >
-              <Star className="w-6 h-6" />
+              <Star className="w-5 h-5" />
+              <span className="text-sm font-medium hidden sm:inline">Favoritos</span>
             </button>
             <ThemeToggle />
           </div>

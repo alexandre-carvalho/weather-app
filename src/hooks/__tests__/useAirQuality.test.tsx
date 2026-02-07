@@ -8,7 +8,7 @@ import React from 'react';
 
 const mockAirQuality: AirQualityData = {
   aqi: 1,
-  quality: 'Good',
+  quality: 'Boa',
   components: {
     co: 230.5,
     no: 0.1,

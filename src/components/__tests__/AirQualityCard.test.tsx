@@ -5,7 +5,7 @@ import type { AirQualityData } from '../../types/weather';
 
 const mockGoodAirQuality: AirQualityData = {
   aqi: 1,
-  quality: 'Good',
+  quality: 'Boa',
   components: {
     co: 230.5,
     no: 0.1,
@@ -21,7 +21,7 @@ const mockGoodAirQuality: AirQualityData = {
 
 const mockPoorAirQuality: AirQualityData = {
   aqi: 4,
-  quality: 'Poor',
+  quality: 'Ruim',
   components: {
     co: 1200.5,
     no: 5.1,
@@ -43,7 +43,7 @@ describe('AirQualityCard Component', () => {
 
   it('displays AQI level and quality', () => {
     render(<AirQualityCard data={mockGoodAirQuality} />);
-    expect(screen.getByText('1 - Good')).toBeInTheDocument();
+    expect(screen.getByText('1 - Boa')).toBeInTheDocument();
   });
 
   it('displays main pollutant', () => {
@@ -70,7 +70,7 @@ describe('AirQualityCard Component', () => {
 
   it('renders poor air quality correctly', () => {
     render(<AirQualityCard data={mockPoorAirQuality} />);
-    expect(screen.getByText('4 - Poor')).toBeInTheDocument();
+    expect(screen.getByText('4 - Ruim')).toBeInTheDocument();
     // PM2.5 appears as main pollutant AND in the list
     expect(screen.getAllByText('PM2.5').length).toBeGreaterThan(0);
     expect(screen.getByText('Todos podem começar a sentir efeitos na saúde.')).toBeInTheDocument();

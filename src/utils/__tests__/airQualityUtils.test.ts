@@ -10,11 +10,11 @@ import type { AirQualityComponents } from '../../types/weather';
 describe('airQualityUtils', () => {
   describe('getAQIQuality', () => {
     it('should return correct quality for each AQI level', () => {
-      expect(getAQIQuality(1)).toBe('Good');
-      expect(getAQIQuality(2)).toBe('Fair');
-      expect(getAQIQuality(3)).toBe('Moderate');
-      expect(getAQIQuality(4)).toBe('Poor');
-      expect(getAQIQuality(5)).toBe('Very Poor');
+      expect(getAQIQuality(1)).toBe('Boa');
+      expect(getAQIQuality(2)).toBe('Razoável');
+      expect(getAQIQuality(3)).toBe('Moderada');
+      expect(getAQIQuality(4)).toBe('Ruim');
+      expect(getAQIQuality(5)).toBe('Muito Ruim');
     });
   });
 
