@@ -5,3 +5,4 @@ export { useForecast } from './useForecast';
 export { useCitySearch } from './useCitySearch';
 export { ThemeProvider, useTheme } from './useTheme';
 export * from './useFavorites';
+export { useAirQuality } from './useAirQuality';

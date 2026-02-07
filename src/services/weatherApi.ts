@@ -7,6 +7,8 @@ import type {
   OpenWeatherGeoResponse,
   WeatherCondition,
   HourlyForecast,
+  AirQualityData,
+  OpenWeatherAirPollutionResponse,
 } from '../types/weather';
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -289,3 +291,57 @@ export async function searchCities(query: string): Promise<CitySearchResult[]> {
     return [];
   }
 }
+
+// Get current air quality data
+export async function getAirQuality(lat: number, lon: number): Promise<AirQualityData> {
+  const url = `${BASE_URL}/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Air pollution API failed: ${response.status}`);
+    }
+
+    const data: OpenWeatherAirPollutionResponse = await response.json();
+    
+    if (!data.list || data.list.length === 0) {
+      throw new Error('No air quality data available');
+    }
+
+    const current = data.list[0];
+    const aqi = current.main.aqi;
+    
+    // Import getAQIQuality and getMainPollutant dynamically to avoid circular deps
+    const { getAQIQuality, getMainPollutant } = await import('../utils/airQualityUtils');
+    
+    return {
+      aqi,
+      quality: getAQIQuality(aqi),
+      components: {
+        co: current.components.co,
+        no: current.components.no,
+        no2: current.components.no2,
+        o3: current.components.o3,
+        so2: current.components.so2,
+        pm2_5: current.components.pm2_5,
+        pm10: current.components.pm10,
+        nh3: current.components.nh3,
+      },
+      mainPollutant: getMainPollutant({
+        co: current.components.co,
+        no: current.components.no,
+        no2: current.components.no2,
+        o3: current.components.o3,
+        so2: current.components.so2,
+        pm2_5: current.components.pm2_5,
+        pm10: current.components.pm10,
+        nh3: current.components.nh3,
+      }),
+    };
+  } catch (error) {
+    console.error('[WeatherAPI] Error in getAirQuality:', error);
+    throw error;
+  }
+}
+

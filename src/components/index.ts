@@ -7,5 +7,8 @@ export { WeatherBackground } from './WeatherBackground';
 export { ThemeToggle } from './ThemeToggle';
 export { HourlyForecast } from './HourlyForecast';
 export { FavoritesList } from './FavoritesList';
+export { TemperatureChart } from './TemperatureChart';
+export { PrecipitationChart } from './PrecipitationChart';
+export { AirQualityCard } from './AirQualityCard';
 export { Skeleton, WeatherSkeleton, ForecastSkeleton } from './ui/Skeleton';
 export { ErrorMessage } from './ui/ErrorMessage';

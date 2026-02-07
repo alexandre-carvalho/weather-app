@@ -13,8 +13,11 @@ import {
   ErrorMessage,
   HourlyForecast,
   FavoritesList,
+  TemperatureChart,
+  PrecipitationChart,
+  AirQualityCard,
 } from './components';
-import { useGeolocation, useWeatherByCoordinates, useForecast, ThemeProvider, useFavorites } from './hooks';
+import { useGeolocation, useWeatherByCoordinates, useForecast, ThemeProvider, useFavorites, useAirQuality } from './hooks';
 import type { CitySearchResult } from './types/weather';
 
 // Create a client
@@ -73,6 +76,16 @@ function WeatherApp() {
 
   const dailyForecast = forecast?.daily;
   const hourlyForecast = forecast?.hourly;
+
+  // Fetch air quality data
+  const {
+    data: airQuality,
+    isLoading: airQualityLoading,
+  } = useAirQuality({
+    latitude: selectedCity?.lat ?? coords.lat,
+    longitude: selectedCity?.lon ?? coords.lon,
+    enabled: (selectedCity !== null) || (coords.lat !== null),
+  });
 
   // Current weather data
   const weather = selectedCity ? weatherByCity : weatherByCoords;
@@ -197,6 +210,21 @@ function WeatherApp() {
           
           {dailyForecast && dailyForecast.length > 0 && (
             <ForecastList forecasts={dailyForecast} />
+          )}
+
+          {/* Charts Section */}
+          {dailyForecast && dailyForecast.length > 0 && (
+            <div className="grid gap-8 md:grid-cols-2">
+              <TemperatureChart forecasts={dailyForecast} />
+              {hourlyForecast && hourlyForecast.length > 0 && (
+                <PrecipitationChart forecasts={hourlyForecast} />
+              )}
+            </div>
+          )}
+
+          {/* Air Quality */}
+          {airQuality && !airQualityLoading && (
+            <AirQualityCard data={airQuality} />
           )}
         </main>
 

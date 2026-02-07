@@ -54,6 +54,29 @@ export interface HourlyForecast {
   condition: WeatherCondition;
 }
 
+// Air quality data
+export type AQILevel = 1 | 2 | 3 | 4 | 5;
+export type AQIQuality = 'Good' | 'Fair' | 'Moderate' | 'Poor' | 'Very Poor';
+
+export interface AirQualityComponents {
+  co: number;      // Carbon monoxide, μg/m3
+  no: number;      // Nitrogen monoxide, μg/m3
+  no2: number;     // Nitrogen dioxide, μg/m3
+  o3: number;      // Ozone, μg/m3
+  so2: number;     // Sulphur dioxide, μg/m3
+  pm2_5: number;   // Fine particles matter, μg/m3
+  pm10: number;    // Coarse particulate matter, μg/m3
+  nh3: number;     // Ammonia, μg/m3
+}
+
+export interface AirQualityData {
+  aqi: AQILevel;
+  quality: AQIQuality;
+  components: AirQualityComponents;
+  mainPollutant: string;
+}
+
+
 // Geolocation coordinates
 export interface Coordinates {
   latitude: number;
@@ -137,6 +160,26 @@ export interface OpenWeatherGeoResponse {
   country: string;
   state?: string;
 }
+
+export interface OpenWeatherAirPollutionResponse {
+  list: Array<{
+    main: {
+      aqi: AQILevel;
+    };
+    components: {
+      co: number;
+      no: number;
+      no2: number;
+      o3: number;
+      so2: number;
+      pm2_5: number;
+      pm10: number;
+      nh3: number;
+    };
+    dt: number;
+  }>;
+}
+
 
 // Theme type based on weather
 export type WeatherTheme =
